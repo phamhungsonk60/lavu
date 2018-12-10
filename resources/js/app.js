@@ -1,33 +1,78 @@
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
 
 require('./bootstrap');
 
 window.Vue = require('vue');
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+window.VueRouter = require('vue-router').default;
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+window.VueAxios = require('vue-axios').default;
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
+window.Axios = require('axios').default;
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
-const app = new Vue({
-    el: '#app'
+
+
+let AppLayout = require('./components/App.vue');
+
+
+const Listposts = Vue.component('Listposts', require('./components/Listposts.vue'));
+
+const Viewpost = Vue.component('Viewpost', require('./components/Viewpost.vue'));
+
+const Editpost = Vue.component('Editpost', require('./components/Editpost.vue'));
+
+const Deletepost = Vue.component('Deletepost', require('./components/Deletepost.vue'));
+
+const Addpost = Vue.component('Addpost', require('./components/Addpost.vue'));
+
+//register modules
+
+//import VueResource from 'vue-resource';
+
+
+
+Vue.use(VueRouter, VueAxios, axios);
+
+
+const routes = [
+    {
+        name: 'Listposts',
+        path: '/',
+        component: Listposts
+    },
+    {
+        name: 'Addpost',
+        path: '/add-post',
+        component: Addpost
+    },
+    {
+        name: 'Viewpost',
+        path: '/view/:id',
+        component: Viewpost
+    },
+    {
+        name: 'Editpost',
+        path: '/edit/:id',
+        component: Editpost
+    },
+    {
+        name: 'Deletepost',
+        path: '/post-delete',
+        component: Deletepost
+    },
+
+];
+
+const router = new VueRouter({
+    mode: 'history',
+    //base: __dirname,
+    routes: routes
 });
+
+new Vue(
+    Vue.util.extend(
+        { router },
+        AppLayout
+    )
+).$mount('#app');
